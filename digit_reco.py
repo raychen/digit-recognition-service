@@ -22,18 +22,20 @@ app = Flask(__name__)
 FlaskJSON(app)
 
 
-def predict(encoded_image):
-    raw_image = b64decode(encoded_image)
-    image = imread(BytesIO(raw_image))
+def predict(image):
+    #TODO: seperate pre-processing and prediction
+    # using a Model class?
 
     gray = rgb2gray(image)[:, :, np.newaxis]
     resized = resize(gray, (IMG_ROWS, IMG_COLS), mode='reflect')
-    p = resized[np.newaxis, :, :, :]
+
+    # keras model will only accept array of input
+    x = resized[np.newaxis, :, :, :]
 
     # seems Keras has a unclosed bug when dealing with threads
     # https://github.com/fchollet/keras/issues/2397
     with graph.as_default():
-        label = model.predict_classes(p, batch_size=1, verbose=0)
+        label = model.predict_classes(x, batch_size=1, verbose=0)
 
     return label[0]
 
@@ -47,7 +49,13 @@ def hello_world():
 def recognize():
     json_request = request.get_json()
 
-    prediction = predict(json_request['image'])
+    #TODO check if flask will raise proper error message when 'image' is absent
+    encoded_image = json_request['image']
+
+    raw_image = b64decode(encoded_image)
+    image = imread(BytesIO(raw_image))
+
+    prediction = predict(image)
     return json_response(200, label=str(prediction))
 
 if __name__ == '__main__':
