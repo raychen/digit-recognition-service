@@ -4,6 +4,7 @@ from flask_json import FlaskJSON, json_response
 
 from io import BytesIO
 from base64 import b64decode
+import binascii
 from skimage.io import imread
 from skimage.color import rgb2gray
 from skimage.transform import resize
@@ -12,7 +13,8 @@ from keras import models
 import tensorflow as tf
 import numpy as np
 
-ERROR_MESSAGE_IMAGE_MISSING_OR_EMPTY = "field 'image' is missing or has empty content"
+ERROR_MESSAGE_IMAGE_MISSING_OR_EMPTY = "field \"image\" is missing or has empty content"
+ERROR_MESSAGE_INVALID_IMAGE_DATA = "invalid image data"
 ERROR_MESSAGE_JSON_EXPECTED = "only content-type: application/json is accepted"
 
 model = models.load_model('mnist.h5')
@@ -75,8 +77,12 @@ def recognize():
     if encoded_image is None or len(encoded_image) == 0:
         return json_response(400, description=ERROR_MESSAGE_IMAGE_MISSING_OR_EMPTY)
 
-    raw_image = b64decode(encoded_image)
-    image = imread(BytesIO(raw_image))
+    # There might be several possible exceptions in this simple process pipeline
+    try:
+        raw_image = b64decode(encoded_image)
+        image = imread(BytesIO(raw_image))
+    except (OSError, binascii.Error, ValueError):
+        return json_response(400, description=ERROR_MESSAGE_INVALID_IMAGE_DATA)
 
     prediction = predict(image)
     return json_response(200, label=str(prediction))
