@@ -12,6 +12,9 @@ from keras import models
 import tensorflow as tf
 import numpy as np
 
+ERROR_MESSAGE_IMAGE_MISSING_OR_EMPTY = "field 'image' is missing or has empty content"
+ERROR_MESSAGE_JSON_EXPECTED = "only content-type: application/json is accepted"
+
 model = models.load_model('mnist.h5')
 graph = tf.get_default_graph()
 
@@ -32,10 +35,10 @@ def predict(image):
     # using a Model class?
 
     gray = rgb2gray(image)[:, :, np.newaxis]
-    resized = resize(gray, (IMG_ROWS, IMG_COLS), mode='reflect')
+    resized_image = resize(gray, (IMG_ROWS, IMG_COLS), mode='reflect')
 
     # keras model will only accept array of input
-    x = resized[np.newaxis, :, :, :]
+    x = resized_image[np.newaxis, :, :, :]
 
     # seems Keras has a unclosed bug when dealing with threads
     # https://github.com/fchollet/keras/issues/2397
@@ -57,9 +60,12 @@ def recognize():
     :return:
     """
     json_request = request.get_json()
+    if json_request is None:
+        return json_response(400, description=ERROR_MESSAGE_JSON_EXPECTED)
 
-    #TODO check if flask will raise proper error message when 'image' is absent
-    encoded_image = json_request['image']
+    encoded_image = json_request.get('image', None)
+    if encoded_image is None or len(encoded_image) == 0:
+        return json_response(400, description=ERROR_MESSAGE_IMAGE_MISSING_OR_EMPTY)
 
     raw_image = b64decode(encoded_image)
     image = imread(BytesIO(raw_image))
