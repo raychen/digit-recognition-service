@@ -17,10 +17,10 @@ class TestDigitReco(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_helloworld(self):
+    def test_usage_page(self):
         resp = self.app.get("/")
         self.assertEqual("200 OK", resp.status)
-        self.assertEqual(b"Hello World!", resp.data)
+        self.assertTrue("usage" in resp.data.decode())
 
     def test_recognize(self):
         resp = self.app.post("/recognize", data=self.request_data, content_type=CONTENT_TYPE_JSON)

@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request
+from flask import request, Response
 from flask_json import FlaskJSON, json_response
 
 from io import BytesIO
@@ -50,7 +50,15 @@ def predict(image):
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    introduction = """
+    <h2>usage:</h2>
+        <ul>
+            <li>Request /recognize</li>
+            <li>content-type: application/json</li>
+            <li>body: {'image': [base64 encoded image binary]}</li>
+        </ul>
+    """
+    return Response(introduction)
 
 
 @app.route('/recognize', methods=['POST'])
