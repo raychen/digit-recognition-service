@@ -23,6 +23,11 @@ FlaskJSON(app)
 
 
 def predict(image):
+    """
+    predict label with the given image i.e. digits from [0-9]
+    :param image: the image as a numpy ndarray
+    :return: predicted label to the given image
+    """
     #TODO: seperate pre-processing and prediction
     # using a Model class?
 
@@ -47,6 +52,10 @@ def hello_world():
 
 @app.route('/recognize', methods=['POST'])
 def recognize():
+    """
+    process incoming request, decode the image and turn it into numpy ndarray
+    :return:
+    """
     json_request = request.get_json()
 
     #TODO check if flask will raise proper error message when 'image' is absent
