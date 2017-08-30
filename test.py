@@ -1,10 +1,10 @@
 import unittest
 import digit_reco
 from json import dumps, loads
-
 from base64 import b64encode
 
 CONTENT_TYPE_JSON = "application/json"
+
 
 class TestDigitReco(unittest.TestCase):
 
@@ -57,6 +57,18 @@ class TestDigitReco(unittest.TestCase):
         # self.assertEqual("400 BAD REQUEST", resp.status)
         self.assertEqual(expected_resp_body, actual_resp_body)
 
+
+from models import load_model
+from skimage.io import imread
+
+
+class TestModels(unittest.TestCase):
+
+    def test_prediction(self):
+        m = load_model('mnist.h5', 'MNISTKeras')
+        image = imread('images/IMG_0189.JPG')
+        label = m.predict(image)
+        self.assertEqual(8, label)
 
 if __name__ == '__main__':
     unittest.main()
