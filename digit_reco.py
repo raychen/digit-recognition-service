@@ -21,12 +21,13 @@ FlaskJSON(app)
 
 
 @app.route('/')
-def hello_world():
+def intro():
     introduction = """
     <h2>usage:</h2>
         <ul>
-            <li>Request /recognize</li>
-            <li>content-type: application/json</li>
+            <li>endpoint: <b>/recognize</b></li>
+            <li>method: <b>POST</b></li>
+            <li>content-type: <b>application/json</b></li>
             <li>body: {'image': [base64 encoded image binary]}</li>
         </ul>
     """
@@ -59,4 +60,4 @@ def recognize():
     return json_response(200, label=str(prediction))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8000)
