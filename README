@@ -1,0 +1,43 @@
+TODO:
+
+    Check TODO within the code
+
+    allow specify model file path, when starting the service
+
+    Serve the code through AWS
+
+    unit test, using test image provided
+        - test api
+        - test functions
+
+    How about bigger image size? streaming?
+
+    non-keras model?
+        seperate model detail, feature extraction etc.
+
+    how RESTful it is:
+        The requirement stats that the API needs to be JSON in/out,
+        One obvious and quick way to upload binary data through JSON is encode the data in base64.
+        However this increase the data size by about 33% (pre-compressed) and adds overhead for decoding
+        The Google Drive API do this in a more "native" way and should be regarded more RESTful.
+
+        https://developers.google.com/drive/v3/web/simple-upload
+
+    improve model?
+
+
+
+Thoughts about the design:
+
+    Production readiness:
+        Seen scikit-learn model API as a standard
+        a general way de/serialize model
+        logging:
+            log incoming image and prediction made, so the new data can be used for further training
+
+
+    RESTFul-ness:
+        The actual http status code should match the code in the response body, semantic consistency.
+        it seems the Flask-Json plugin I picked always return a 200 in actual http status
+    Caveats:
+        model persistent: due to different version of Keras and TF. loading may produce warning message
