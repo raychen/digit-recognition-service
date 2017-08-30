@@ -39,7 +39,7 @@ def predict(image):
     gray = rgb2gray(image)[:, :, np.newaxis]
     resized_image = resize(gray, (IMG_ROWS, IMG_COLS), mode='reflect')
 
-    # keras model will only accept array of input
+    # keras model only accept array of input, so the image needs to be put into an array
     x = resized_image[np.newaxis, :, :, :]
 
     # seems Keras has a unclosed bug when dealing with threads
@@ -77,7 +77,8 @@ def recognize():
     if encoded_image is None or len(encoded_image) == 0:
         return json_response(400, description=ERROR_MESSAGE_IMAGE_MISSING_OR_EMPTY)
 
-    # There might be several possible exceptions in this simple process pipeline
+    # Once the image data is corrupted in transfer,
+    # there might be several possible exceptions in this simple process pipeline
     try:
         raw_image = b64decode(encoded_image)
         image = imread(BytesIO(raw_image))
