@@ -2,6 +2,8 @@ import unittest
 import digit_reco
 from json import dumps, loads
 from base64 import b64encode
+from models import load_model
+from skimage.io import imread
 
 CONTENT_TYPE_JSON = "application/json"
 
@@ -56,10 +58,6 @@ class TestDigitReco(unittest.TestCase):
 
         # self.assertEqual("400 BAD REQUEST", resp.status)
         self.assertEqual(expected_resp_body, actual_resp_body)
-
-
-from models import load_model
-from skimage.io import imread
 
 
 class TestModels(unittest.TestCase):

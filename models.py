@@ -3,9 +3,11 @@ import tensorflow as tf
 import numpy as np
 from skimage.color import rgb2gray
 from skimage.transform import resize
+from os.path import abspath, dirname, join
 
 
-def load_model(file_path, model_type):
+def load_model(model_name, model_type):
+    file_path = join(dirname(abspath(__file__)), 'model_files', model_name)
     if model_type in MODEL_REGISTRY:
         return MODEL_REGISTRY[model_type](file_path)
     else:
