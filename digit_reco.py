@@ -6,16 +6,15 @@ from io import BytesIO
 from base64 import b64decode
 import binascii
 from skimage.io import imread
-
-
 from models import load_model
+
 
 ERROR_MESSAGE_IMAGE_MISSING_OR_EMPTY = "field \"image\" is missing or has empty content"
 ERROR_MESSAGE_INVALID_IMAGE_DATA = "invalid image data"
 ERROR_MESSAGE_JSON_EXPECTED = "only content-type: application/json is accepted"
 
+#TODO it would be better to pass in model name and file path through configuration file
 model = load_model('mnist.h5', 'MNISTKeras')
-
 app = Flask(__name__)
 FlaskJSON(app)
 
@@ -58,6 +57,7 @@ def recognize():
 
     prediction = model.predict(image)
     return json_response(200, label=str(prediction))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)

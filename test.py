@@ -11,7 +11,7 @@ class TestDigitReco(unittest.TestCase):
     def setUp(self):
         digit_reco.app.testing = True
         self.app = digit_reco.app.test_client()
-        self.encoded_image = b64encode(open("9.png", "rb").read()).decode()
+        self.encoded_image = b64encode(open("images/9.png", "rb").read()).decode()
         self.request_data = dumps(dict(image=self.encoded_image))
 
     def tearDown(self):
