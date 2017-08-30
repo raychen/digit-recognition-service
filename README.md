@@ -1,9 +1,7 @@
 # Digit Recognition Service
-___
 
 
 # Description
----
 This web service host a digit recognition model, i.e. given a image containing a single digit, it will predict which of the 10 digits is in the image.
 
 Logically, the program could been seen as two parts:
@@ -25,7 +23,6 @@ Logically, the program could been seen as two parts:
 
          
 # Design and Trade-off
----
 ## The line between Web Service and Model
  Firstly, the handling of incoming JSON data and model related code should be separated,
  In Python ecosystem, Numpy ndarray is lingua franca in both image processing and machine learning,
@@ -62,7 +59,6 @@ Every time a new model is implemented and trained, a name should be given (perha
 
 
 ## Web Service:
----
 Following are considerations to make the service more production ready
 
 ### JSON input
@@ -86,7 +82,6 @@ Image data transfer, decoding, transformation, prediction are major computations
 
             
 ## Others
----
 Link to the hosted [Digit Recognition Service](http://ec2-35-158-228-11.eu-central-1.compute.amazonaws.com:8000/)
 
 In this Github account you could also find my other Computer Vision related code
